@@ -2,11 +2,11 @@
 #include <Servo.h>
 
 //int LED_PIN = 13;
-int servopin1 = 9;    //Define servo interface digital interface 9
-int servopin2 = 6;    //Define servo interface digital interface 6
-int servopin3 = 5;    //Define servo interface digital interface 5
-int servopin4 = 3;    //Define servo interface digital interface 3
-int servopin5 = 11;   //Define servo interface digital interface 11
+int servopin1 = 8;    //Define servo interface digital interface 9
+int servopin2 = 9;    //Define servo interface digital interface 6
+int servopin3 = 10;    //Define servo interface digital interface 5
+int servopin4 = 11;    //Define servo interface digital interface 3
+int servopin5 = 12;   //Define servo interface digital interface 11
 
 int moveServoData;
 int servo1Angle=90;
@@ -19,24 +19,23 @@ Servo servo2;
 Servo servo3;
 Servo servo4;
 Servo servo5;
-int angle = 90;        //Angle of rotation of the servo
 
-//SoftwareSerial bluetoothSerial(0, 1);
+SoftwareSerial bluetoothSerial(0, 1);
 
 void setup() 
 {
 //  pinMode(LED_PIN, OUTPUT);
   
-//  Serial.begin(9600);
-//  bluetoothSerial.begin(9600);
-//  Serial.println("Ready");
+  Serial.begin(9600);
+  bluetoothSerial.begin(9600);
+  Serial.println("Ready");
 
   pinMode(servopin1,OUTPUT);//Set the servo interface as the output interface
   pinMode(servopin2,OUTPUT);//Set the servo interface as the output interface
   pinMode(servopin3,OUTPUT);//Set the servo interface as the output interface
   pinMode(servopin4,OUTPUT);//Set the servo interface as the output interface
   pinMode(servopin5,OUTPUT);//Set the servo interface as the output interface
-  Serial.begin(9600);
+
   servo1.attach(servopin1);
   servo2.attach(servopin2);
   servo3.attach(servopin3);
@@ -51,13 +50,67 @@ void setup()
 
 void loop() 
 {
-//  if(bluetoothSerial.available())
-//  {
-//    String message = bluetoothSerial.readString();
-//
-//    if(message == "on")
-//      digitalWrite(LED_PIN, HIGH);
-//    else if(message == "off")
-//      digitalWrite(LED_PIN, LOW);
-//  }
+  if(bluetoothSerial.available())
+  {
+    String message = bluetoothSerial.readString();
+    int angle = message.substring(2).toInt();
+
+    if(message.startsWith("s1"))
+    {
+      if(angle > 180)
+        servo1Angle = 180;
+      else if(angle < 0)
+        servo1Angle = 0;
+      else
+        servo1Angle = angle;
+
+      servo1.write(servo1Angle);
+    }
+    else if(message.startsWith("s2"))
+    {
+      if(angle > 180)
+        servo2Angle = 180;
+      else if(angle < 0)
+        servo2Angle = 0;
+      else
+        servo2Angle = angle;
+
+      servo2.write(servo2Angle);
+    }
+    else if(message.startsWith("s3"))
+    {
+      if(angle > 180)
+        servo3Angle = 180;
+      else if(angle < 0)
+        servo3Angle = 0;
+      else
+        servo3Angle = angle;
+
+      servo3.write(servo3Angle);
+    }
+    else if(message.startsWith("s4"))
+    {
+      if(angle > 180)
+        servo4Angle = 180;
+      else if(angle < 0)
+        servo4Angle = 0;
+      else
+        servo4Angle = angle;
+
+      servo4.write(servo4Angle);
+    }
+    else if(message.startsWith("s5"))
+    {
+      if(angle > 180)
+        servo5Angle = 180;
+      else if(angle < 0)
+        servo5Angle = 0;
+      else
+        servo5Angle = angle;
+
+      servo5.write(servo5Angle);
+    }
+
+    delay(20);
+  }
 }
